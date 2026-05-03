@@ -102,6 +102,8 @@ export function Dashboard() {
   const [showShare, setShowShare] = useState<SessionData | null>(null);
   const [undoStack, setUndoStack] = useState<{ groups: TabGroupData[]; action: string }[]>([]);
   const [showUndo, setShowUndo] = useState(false);
+  const [draggedGroupId, setDraggedGroupId] = useState<string | null>(null);
+  const [dragOverGroupId, setDragOverGroupId] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Auto-save current working state with debounce
@@ -285,6 +287,29 @@ export function Dashboard() {
         break;
     }
     setGroups(sorted);
+  };
+
+  // Drag and drop handlers
+  const handleDragStart = (_tabId: string, fromGroupId: string) => {
+    setDraggedGroupId(fromGroupId);
+  };
+
+  const handleDragEnter = (groupId: string) => {
+    if (draggedGroupId && draggedGroupId !== groupId) {
+      setDragOverGroupId(groupId);
+    }
+  };
+
+  const handleDragLeave = (_groupId: string) => {
+    setDragOverGroupId(null);
+  };
+
+  const handleDrop = (tabId: string, fromGroupId: string, toGroupId: string) => {
+    setDraggedGroupId(null);
+    setDragOverGroupId(null);
+    if (fromGroupId === toGroupId) return;
+    pushUndo('Move tab');
+    handleMoveTab(tabId, fromGroupId, toGroupId);
   };
 
   const handleCheckDeadLinks = async () => {
@@ -799,6 +824,11 @@ export function Dashboard() {
                       onMoveTab={handleMoveTab}
                       onRestoreGroup={handleRestoreGroup}
                       otherGroups={groups.filter(g => g.id !== group.id).map(g => ({ id: g.id, name: g.name }))}
+                      onDragStart={handleDragStart}
+                      onDrop={handleDrop}
+                      onDragEnter={handleDragEnter}
+                      onDragLeave={handleDragLeave}
+                      isDraggingOver={dragOverGroupId === group.id}
                     />
                   ))}
                 </div>

@@ -17,12 +17,40 @@ interface TabCardProps {
   onRenameGroup: (id: string, name: string) => void;
   onMoveTab: (tabId: string, fromGroupId: string, toGroupId: string) => void;
   onRestoreGroup?: (tabs: TabData[]) => void;
+  onDragStart?: (tabId: string, groupId: string) => void;
+  onDrop?: (tabId: string, fromGroupId: string, toGroupId: string) => void;
+  onDragEnter?: (groupId: string) => void;
+  onDragLeave?: (groupId: string) => void;
+  isDraggingOver?: boolean;
 }
 
-export function TabCard({ group, index, otherGroups, onDeleteGroup, onDeleteTab, onRenameGroup, onMoveTab, onRestoreGroup }: TabCardProps) {
+export function TabCard({ group, index, otherGroups, onDeleteGroup, onDeleteTab, onRenameGroup, onMoveTab, onRestoreGroup, onDragStart, onDrop, onDragEnter, onDragLeave, isDraggingOver }: TabCardProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(group.name);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const draggedTabId = e.dataTransfer.getData('text/plain');
+    const draggedFromGroupId = e.dataTransfer.getData('application/x-from-group-id');
+    if (onDrop && draggedTabId && draggedFromGroupId) {
+      onDrop(draggedTabId, draggedFromGroupId, group.id);
+    }
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (onDragEnter) onDragEnter(group.id);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (onDragLeave) onDragLeave(group.id);
+  };
 
   const handleRename = () => {
     if (editName.trim()) {
@@ -32,13 +60,23 @@ export function TabCard({ group, index, otherGroups, onDeleteGroup, onDeleteTab,
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.08, duration: 0.35, ease: 'easeOut' }}
-      className={`rounded-xl border p-3 ${group.color || 'bg-surface-raised border-zinc-700/50'}`}
+    <div
+      className={`rounded-xl border p-3 transition-all duration-200 ${
+        isDraggingOver
+          ? 'border-purple-500/50 bg-purple-500/10 scale-[1.02]'
+          : group.color || 'bg-surface-raised border-zinc-700/50'
+      }`}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
     >
-      <div className="flex items-center justify-between mb-2">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ delay: index * 0.08, duration: 0.35, ease: 'easeOut' }}
+      >
+        <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2 min-w-0">
           <button
             onClick={() => setCollapsed(!collapsed)}
@@ -101,29 +139,47 @@ export function TabCard({ group, index, otherGroups, onDeleteGroup, onDeleteTab,
                   key={tab.id}
                   tab={tab}
                   index={i}
+                  groupId={group.id}
                   otherGroups={otherGroups}
                   onDelete={() => onDeleteTab(group.id, tab.id)}
                   onMove={(toGroupId) => onMoveTab(tab.id, group.id, toGroupId)}
+                  onDragStart={onDragStart}
                 />
               ))}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
-function TabRow({ tab, index, otherGroups, onDelete, onMove }: {
+function TabRow({ tab, index, groupId, otherGroups, onDelete, onMove, onDragStart }: {
   tab: TabData;
   index: number;
+  groupId: string;
   otherGroups: OtherGroup[];
   onDelete: () => void;
   onMove: (toGroupId: string) => void;
+  onDragStart?: (tabId: string, fromGroupId: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const [showMove, setShowMove] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const moveRef = useRef<HTMLDivElement>(null);
+
+  const handleDragStart = (e: React.DragEvent) => {
+    setIsDragging(true);
+    e.dataTransfer.setData('text/plain', tab.id);
+    e.dataTransfer.setData('application/x-from-group-id', groupId);
+    e.dataTransfer.effectAllowed = 'move';
+    if (onDragStart) onDragStart(tab.id, groupId);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   useEffect(() => {
     if (!showMove) return;
@@ -140,17 +196,23 @@ function TabRow({ tab, index, otherGroups, onDelete, onMove }: {
   const hue = tab.domain.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 360;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.03 }}
-      className={`flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors group ${
+    <div
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      className={`flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors group cursor-grab active:cursor-grabbing ${
         tab.isDuplicate ? 'opacity-60' : ''
-      }`}
+      } ${isDragging ? 'opacity-50 scale-95' : ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <GripVertical size={14} className="opacity-20 shrink-0 cursor-grab" />
+      <motion.div
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: index * 0.03 }}
+        className="flex items-center gap-2 w-full"
+      >
+        <GripVertical size={14} className="opacity-40 shrink-0" />
 
       <div className="relative shrink-0">
         {tab.favicon ? (
@@ -254,5 +316,6 @@ function TabRow({ tab, index, otherGroups, onDelete, onMove }: {
         </AnimatePresence>
       </div>
     </motion.div>
+  </div>
   );
 }
