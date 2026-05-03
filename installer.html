@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install TabTamer - AI Tab Organizer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 100%);
+      color: #e2e2e8;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.3);
+    }
+
+    .logo svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #c084fc, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 1.25rem;
+      color: #a1a1aa;
+      margin-bottom: 40px;
+    }
+
+    .install-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 48px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+      text-decoration: none;
+    }
+
+    .install-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
+    }
+
+    .install-button:active {
+      transform: translateY(0);
+    }
+
+    .steps {
+      margin-top: 60px;
+    }
+
+    .steps-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 40px;
+      color: #e2e2e8;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .step.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(192, 132, 252, 0.3);
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #e2e2e8;
+    }
+
+    .step-description {
+      color: #a1a1aa;
+      font-size: 0.95rem;
+    }
+
+    .step-code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.85rem;
+      color: #c084fc;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .copy-button {
+      margin-left: 8px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      background: rgba(192, 132, 252, 0.2);
+      border: 1px solid rgba(192, 132, 252, 0.3);
+      border-radius: 4px;
+      color: #c084fc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-button:hover {
+      background: rgba(192, 132, 252, 0.3);
+    }
+
+    .copy-button.copied {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    .browser-warning {
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .browser-warning.visible {
+      display: block;
+    }
+
+    .browser-warning h3 {
+      color: #ef4444;
+      margin-bottom: 8px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 60px;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .feature:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(192, 132, 252, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #e2e2e8;
+    }
+
+    .feature-description {
+      color: #a1a1aa;
+      font-size: 0.9rem;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #71717a;
+      font-size: 0.875rem;
+    }
+
+    .footer a {
+      color: #c084fc;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .install-button {
+        padding: 16px 32px;
+        font-size: 1.1rem;
+      }
+
+      .step {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+      </div>
+      <h1>TabTamer</h1>
+      <p class="tagline">AI-powered browser tab organizer for Chrome</p>
+      <button class="install-button" onclick="scrollToSteps()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Install TabTamer
+      </button>
+    </div>
+
+    <div class="browser-warning" id="browserWarning">
+      <h3>⚠️ Chrome Required</h3>
+      <p>TabTamer is a Chrome extension. Please open this page in Google Chrome to install.</p>
+    </div>
+
+    <div class="steps" id="steps">
+      <h2 class="steps-title">Installation Guide</h2>
+
+      <div class="step" data-step="1">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3 class="step-title">Download TabTamer</h3>
+          <p class="step-description">Download the latest release from GitHub and extract the zip file.</p>
+          <a href="https://github.com/BlackWh1te/TabTamer/archive/refs/heads/master.zip" class="step-code" target="_blank">
+            Download TabTamer.zip
+          </a>
+        </div>
+      </div>
+
+      <div class="step" data-step="2">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3 class="step-title">Open Chrome Extensions</h3>
+          <p class="step-description">Type this URL in a new tab or click below:</p>
+          <a href="chrome://extensions/" class="step-code" target="_blank">
+            chrome://extensions/
+          </a>
+        </div>
+      </div>
+
+      <div class="step" data-step="3">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3 class="step-title">Enable Developer Mode</h3>
+          <p class="step-description">Toggle the switch in the top-right corner labeled "Developer mode".</p>
+        </div>
+      </div>
+
+      <div class="step" data-step="4">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3 class="step-title">Load the Extension</h3>
+          <p class="step-description">Click "Load unpacked" and select the <code>extension</code> folder from the downloaded TabTamer folder.</p>
+          <div class="step-code">
+            TabTamer-master/extension/
+            <button class="copy-button" onclick="copyPath('TabTamer-master/extension/')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="5">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3 class="step-title">You're Done! 🎉</h3>
+          <p class="step-description">TabTamer is now installed. Press <code>Ctrl+Shift+Y</code> to open it and tame your tabs!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">AI-Powered</h3>
+        <p class="feature-description">Smart 3-layer clustering engine automatically groups your tabs by topic.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Privacy-First</h3>
+        <p class="feature-description">All processing happens locally. No data sent to servers.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Save Sessions</h3>
+        <p class="feature-description">Save, load, and share tab sessions for different projects.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Free & Open Source</h3>
+        <p class="feature-description">Completely free. MIT licensed. Contribute on GitHub.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>
+        Made with ❤️ by <a href="https://github.com/BlackWh1te">BlackWh1te</a> ·
+        <a href="https://github.com/BlackWh1te/TabTamer">GitHub</a> ·
+        MIT License
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Detect browser
+    function detectBrowser() {
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      const isEdge = /Edg/.test(navigator.userAgent);
+      const isBrave = /Brave/.test(navigator.userAgent);
+
+      if (!isChrome && !isEdge && !isBrave) {
+        document.getElementById('browserWarning').classList.add('visible');
+      }
+    }
+
+    // Animate steps on scroll
+    function animateSteps() {
+      const steps = document.querySelectorAll('.step');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.2 });
+
+      steps.forEach(step => observer.observe(step));
+    }
+
+    // Copy path to clipboard
+    function copyPath(path) {
+      navigator.clipboard.writeText(path).then(() => {
+        const button = event.target;
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        setTimeout(() => {
+          button.textContent = 'Copy';
+          button.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Scroll to steps
+    function scrollToSteps() {
+      document.getElementById('steps').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      detectBrowser();
+      animateSteps();
+    });
+  </script>
+</body>
+</html>
