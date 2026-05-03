@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      width: 320px;
+      padding: 16px;
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f13;
+      color: #e2e2e8;
+    }
+    h1 {
+      font-size: 16px;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .count {
+      color: #a1a1aa;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .warning {
+      color: #fbbf24;
+      font-size: 11px;
+      margin-bottom: 8px;
+      display: none;
+      line-height: 1.4;
+    }
+    .warning.show { display: block; }
+    button {
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    button:hover { opacity: 0.9; transform: translateY(-1px); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .primary {
+      background: linear-gradient(135deg, #c084fc, #a855f7);
+      color: white;
+      margin-bottom: 8px;
+    }
+    .secondary {
+      background: #27272a;
+      color: #e2e2e8;
+      margin-bottom: 8px;
+    }
+    .tertiary {
+      background: transparent;
+      color: #a1a1aa;
+      border: 1px solid #3f3f46;
+      font-size: 12px;
+      padding: 8px;
+    }
+    .footer {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #52525b;
+      text-align: center;
+    }
+    .options {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .option-btn {
+      flex: 1;
+      font-size: 12px;
+      padding: 6px;
+      background: #27272a;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: #a1a1aa;
+      cursor: pointer;
+    }
+    .option-btn.active {
+      border-color: #a855f7;
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.1);
+    }
+    .shortcut {
+      font-size: 11px;
+      color: #71717a;
+      text-align: center;
+      margin-top: 4px;
+    }
+    kbd {
+      background: #27272a;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 10px;
+    }
+    .divider {
+      height: 1px;
+      background: #27272a;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    TabTamer
+  </h1>
+  <div class="count" id="tabCount">Loading...</div>
+  <div class="warning" id="warningClose">Closing tabs frees memory but you can restore them anytime from the dashboard.</div>
+  <div class="warning" id="warningGroup">Grouping tabs uses Chrome's native tab groups. Colors will be assigned automatically.</div>
+
+  <div class="options">
+    <button class="option-btn active" id="modeOrganize">Organize</button>
+    <button class="option-btn" id="modeClose">Close</button>
+    <button class="option-btn" id="modeGroup">Chrome Groups</button>
+  </div>
+
+  <button class="primary" id="tameBtn">Tame my tabs</button>
+  <button class="secondary" id="dashboardBtn">Open dashboard</button>
+  <div class="divider"></div>
+  <button class="tertiary" id="settingsBtn">Settings...</button>
+
+  <div class="shortcut">Shortcut: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Y</kbd></div>
+  <div class="footer">Smart grouping. Private. No cloud.</div>
+  <script src="popup.js"></script>
+</body>
+</html>
