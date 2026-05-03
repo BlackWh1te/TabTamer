@@ -16,6 +16,7 @@ AI-powered browser tab organizer for Chrome. Tame your tab chaos with smart, aut
 - **Auto-Save** - Crash recovery - automatically saves unsaved work
 - **Keyboard Shortcuts** - Quick access to common actions
 - **Re-Group** - Re-run AI grouping on current tabs
+- **Drag-and-Drop** - Drag tabs between groups by their grip handle
 - **Sort Groups** - Sort by name, size, or recency
 - **Shareable HTML** - Export sessions as standalone HTML files to share with others
 
@@ -98,7 +99,7 @@ After capture, tabs appear in the TabTamer dashboard organized into smart groups
 - **Search** - Press `/` to focus search, or use the search bar to filter tabs
 - **Delete Groups/Tabs** - Click the trash icon to delete (use Ctrl+Z to undo)
 - **Rename Groups** - Click the group name to rename
-- **Move Tabs** - Use the dropdown to move tabs between groups
+- **Move Tabs** - Drag any tab by its grip handle (`⋮⋮`) to another group. The target group highlights in purple. Drop to move. (Dropdown menu still available as keyboard fallback.)
 - **Restore Tabs** - Click "Restore all" or restore individual groups to reopen in Chrome
 - **Check Links** - Click "Check links" to scan for dead URLs
 - **Re-Group** - Click "Re-group" to re-run AI grouping on current tabs
