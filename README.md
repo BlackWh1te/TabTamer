@@ -25,12 +25,55 @@ AI-powered browser tab organizer for Chrome. Tame your tab chaos with smart, aut
 
 ### Manual Installation
 
-1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked"
-5. Select the `extension` folder from this repository
-6. TabTamer is now installed!
+Follow these steps to install TabTamer manually in Chrome:
+
+#### Step 1: Download TabTamer
+
+- **Option A (Download ZIP):** Go to [https://github.com/BlackWh1te/TabTamer](https://github.com/BlackWh1te/TabTamer) and click the green "Code" button, then "Download ZIP". Extract the downloaded file to a folder on your computer.
+- **Option B (Git Clone):** If you have Git installed, run:
+  ```bash
+  git clone https://github.com/BlackWh1te/TabTamer.git
+  cd TabTamer
+  ```
+
+#### Step 2: Open Chrome Extensions Page
+
+- Open Google Chrome
+- Type `chrome://extensions/` in the address bar and press Enter
+- Alternatively, click the Chrome menu (three dots) → More tools → Extensions
+
+#### Step 3: Enable Developer Mode
+
+- Look for a toggle switch labeled "Developer mode" in the top-right corner of the extensions page
+- Click it to enable Developer mode (the toggle will turn blue when enabled)
+- This allows you to load unpacked extensions that aren't from the Chrome Web Store
+
+#### Step 4: Load the Extension
+
+- With Developer mode enabled, you'll see new buttons appear at the top left
+- Click the "Load unpacked" button
+- A file picker dialog will open
+
+#### Step 5: Select the Extension Folder
+
+- Navigate to the folder where you extracted/downloaded TabTamer
+- **Important:** Select the `extension` folder inside the TabTamer directory (not the root TabTamer folder)
+- The path should look like: `TabTamer/extension/`
+- Click "Select Folder"
+
+#### Step 6: Verify Installation
+
+- TabTamer should now appear in your extensions list with its purple icon
+- You should see a confirmation message that the extension was loaded successfully
+- Pin TabTamer to your toolbar by clicking the puzzle piece icon → Pin next to TabTamer
+
+#### Step 7: Start Using TabTamer
+
+- Press `Ctrl+Shift+Y` (Windows/Linux) or `Cmd+Shift+Y` (Mac) to open TabTamer
+- Or click the TabTamer icon in your Chrome toolbar
+- Try the demo mode or capture your actual tabs!
+
+**💡 Tip:** For a visual walkthrough with animated steps, visit the [installer page](https://blackwh1te.github.io/TabTamer/installer.html)
 
 ## 📖 How to Use
 
